@@ -1,0 +1,51 @@
+app.post("/api/posts", (req, res) => {
+  console.log(req.body);
+  Posts.create({
+    image: req.body.image,
+    title: req.body.title,
+    date: req.body.date,
+    content: req.body.content,
+    comment: req.body.comment
+  }).then(posts => {
+    res.send(posts)
+    // res.send("POST Created!!")
+  }, (errors) => {
+    res.status(422).json(errors)
+  });
+});
+
+app.delete("/api/posts/:id", (req, res) => {
+  let { id } = req.params;
+
+  Posts.findByPk(id).then(posts => {
+    posts.destroy().then(() => {
+      res.status(204).json(errors)
+    });
+  });
+});
+
+
+app.post("/api/posts", (req, res) => {
+  console.log(req.body);
+  Posts.create({
+    image: req.body.image,
+    title: req.body.title,
+    date: req.body.date,
+    content: req.body.content,
+    comment: req.body.comment
+  }).then(posts => {
+    res.send(posts)
+    // res.send("POST Created!!")
+  }, (validation) => {
+    console.log(validation);
+    res.json({
+
+      errors: validation.errors.map((error) => {
+        return {
+          attribute: error.path,
+          message: error.message
+        };
+      })
+    });
+  });
+});
